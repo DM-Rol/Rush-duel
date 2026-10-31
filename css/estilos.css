@@ -1,0 +1,996 @@
+/* =============================================
+   ESTILOS.CSS - Yu-Gi-Oh! Rush Duel Rol
+   =============================================
+   Estructura general:
+     1. Variables globales
+     2. Reset y base
+     3. Cabecera / Banner
+     4. Menú principal
+     5. Secciones (mostrar/ocultar)
+     6. Tienda - contenedor y cartas
+     7. Filtros y buscador
+     8. Panel de información de carta
+     9. Estilos de texto de efectos
+    10. Nav (reservado)
+    11. Responsive (móvil)
+   ============================================= */
+
+
+/* =============================================
+   1. VARIABLES GLOBALES
+   Los colores repetidos se definen aquí como
+   variables CSS. Para cambiar el azul principal
+   solo hay que tocarlo en este bloque.
+   ============================================= */
+
+:root {
+    --color-fondo:        #001a33;   /* Fondo general de la página */
+    --color-primario:     #3b90ff;   /* Azul brillante: bordes y acentos */
+    --color-panel:        #0f2f57;   /* Fondo de inputs y paneles */
+    --color-panel-oscuro: #0b1b30;   /* Fondo más oscuro para filtros */
+    --color-boton:        #23426d;   /* Fondo de botones */
+    --color-boton-hover:  #31558a;   /* Hover de botones */
+    --color-borde:        #3b5f96;   /* Bordes de inputs y paneles */
+    --color-separador:    #17365c;   /* Líneas entre filas de filtros */
+    --color-texto:        #ffffff;   /* Texto principal */
+    --color-placeholder:  #a0a0a0;   /* Placeholder de inputs */
+}
+
+
+/* =============================================
+   2. RESET Y BASE
+   ============================================= */
+
+body {
+    margin: 0;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: Arial, sans-serif;
+}
+
+
+/* =============================================
+   3. CABECERA / BANNER
+   El banner se muestra solo con background-image.
+   No se usa un <img> para evitar duplicados.
+   ============================================= */
+
+header {
+    height: 250px;
+    background-image: url("../img/banner.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+/* Subtítulo decorativo debajo del banner */
+.banner-subtitulo {
+    text-align: center;
+    padding: 14px 20px 10px;
+    background: linear-gradient(180deg, #000d1a 0%, var(--color-fondo) 100%);
+    letter-spacing: 0.12em;
+    font-size: 20px;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-image: linear-gradient(90deg, #7ab8ff 0%, #ffffff 40%, #c8a0ff 70%, #7ab8ff 100%);
+    text-shadow: none;
+    font-style: italic;
+    font-weight: bold;
+}
+
+/* Ocultar tarjetas del menú marcadas como inactivas */
+.tarjeta-oculta {
+    display: none;
+}
+
+/* Ocultar el banner cuando el constructor de deck está activo */
+body.modo-deck header {
+    display: none;
+}
+
+
+/* =============================================
+   4. MENÚ PRINCIPAL
+   Grid de tarjetas centradas con imagen de
+   fondo y texto superpuesto abajo.
+   ============================================= */
+
+/* Contenedor: flex wrap centrado */
+.menu-principal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Cada tarjeta del menú */
+.tarjeta-menu {
+    position: relative;
+    width: 300px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 3px solid var(--color-primario);
+    transition: 0.2s;
+}
+
+/* Efecto hover: escala ligera */
+.tarjeta-menu:hover {
+    transform: scale(1.03);
+}
+
+/* Imagen de fondo de la tarjeta */
+.tarjeta-menu img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Capa de texto superpuesta en la parte inferior */
+.texto-menu {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.texto-menu h2 {
+    margin: 0;
+}
+
+.texto-menu p {
+    margin: 5px 0 0 0;
+}
+
+
+/* =============================================
+   5. SECCIONES (MOSTRAR / OCULTAR)
+   Por defecto todas ocultas.
+   La clase "activo" las hace visibles.
+   La gestiona mostrar() en script.js.
+   ============================================= */
+
+section {
+    display: none;
+    padding: 20px;
+}
+
+/* Clase que activa la sección visible */
+.activo {
+    display: block;
+}
+
+/* El constructor de deck ocupa toda la pantalla sin el banner */
+#decks.activo {
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* La tienda no necesita padding propio — lo gestiona internamente */
+#tienda.activo {
+    padding: 0;
+}
+
+
+/* =============================================
+   6. BOTÓN VOLVER AL MENÚ
+   ============================================= */
+
+/* Botón estilizado que reemplaza el <button> genérico */
+.btn-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    margin-bottom: 18px;
+    background: transparent;
+    color: var(--color-primario);
+    border: 1px solid var(--color-primario);
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.18s, color 0.18s;
+}
+
+.btn-volver:hover {
+    background: var(--color-primario);
+    color: #000e1f;
+}
+
+/* Flecha del botón volver */
+.btn-volver .flecha {
+    font-size: 16px;
+    line-height: 1;
+    transition: transform 0.18s;
+}
+
+.btn-volver:hover .flecha {
+    transform: translateX(-3px);
+}
+
+/* Versión del botón volver específica para el constructor de deck:
+   queda dentro de la barra de cabecera del constructor */
+.deck-cabecera {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 16px;
+    background: #040f1e;
+    border-bottom: 2px solid var(--color-primario);
+}
+
+.deck-cabecera h2 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--color-texto);
+    letter-spacing: 0.05em;
+}
+
+/* En el constructor el botón no tiene margen inferior */
+.deck-cabecera .btn-volver {
+    margin-bottom: 0;
+}
+
+
+/* =============================================
+   7. TIENDA - CONTENEDOR Y CARTAS
+   ============================================= */
+
+/* Contenedor externo: centra el bloque de cartas */
+.contenedor-tienda {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0;
+    overflow-x: auto;   /* respaldo si el viewport es menor que 984px */
+}
+
+/* Zona donde se agrupan las cartas de una rareza */
+/* Máximo 10 cartas por fila, centradas dentro del rectángulo */
+.lista-cartas {
+    /* 10 col × 82px + 9 gaps × 12px + padding 28px×2 = 984px */
+    width: 984px;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(10, 82px);
+    justify-content: center;
+    gap: 12px;
+    background: #072240;
+    border: 1px solid #0d4b87;
+    border-radius: 10px;
+    padding: 16px 28px;
+    box-sizing: border-box;
+}
+
+/* Título de cada bloque de rareza (UR, SR, etc.) */
+.titulo-seccion {
+    width: 984px;
+    margin: 24px auto 8px auto;
+    padding: 10px 14px;
+    background: var(--color-panel-oscuro);
+    border-left: 6px solid var(--color-primario);
+    color: var(--color-texto);
+    font-size: 22px;
+    letter-spacing: 0.06em;
+}
+
+/* Contenedor individual de cada carta */
+.contenedor-carta {
+    position: relative;
+    display: block;   /* grid-item: no necesita inline-block */
+}
+
+/* Imagen miniatura de la carta */
+.carta-mini {
+    width: 82px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+/* Hover: ligera transparencia y escala para indicar que es clickeable */
+.carta-mini:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+}
+
+/* Badge de rareza superpuesto sobre la carta */
+.rareza {
+    position: absolute;
+    top: -14px;
+    right: -1px;
+    width: 55px;
+    z-index: 10;
+    pointer-events: none; /* No interfiere con el click en la carta */
+}
+
+
+/* =============================================
+   7. TIENDA — BARRA SUPERIOR Y FILTROS
+   Barra que contiene buscador+filtros (izq)
+   y el botón Constructor de Deck (der).
+   Alineada con el ancho del contenedor de cartas.
+   ============================================= */
+
+/* Barra superior de la tienda:
+   Mismo ancho y centrado que .lista-cartas para alinearse con las cartas */
+.tienda-barra {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px 2.5% 0 2.5%;  /* 2.5% = (100% - 95%) / 2, igual que lista-cartas */
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--color-fondo);
+}
+
+/* Lado izquierdo: botón volver + buscador + filtros en columna */
+.tienda-barra-izq {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding-bottom: 16px;
+}
+
+/* El botón volver en la tienda: espacio compacto antes del buscador */
+.tienda-barra-izq .btn-volver {
+    margin-bottom: 10px;
+}
+
+/* Contenedor del buscador+filtros */
+.filtros {
+    width: 320px;
+    max-width: 320px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* Input de búsqueda por nombre */
+#busqueda {
+    width: 320px;
+    max-width: 320px;
+    height: 44px;
+    padding: 10px 14px 10px 40px; /* espacio para icono lupa */
+    font-size: 15px;
+    background: var(--color-panel);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px 8px 0 0;
+    box-sizing: border-box;
+    margin: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0a0a0' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+}
+
+#busqueda::placeholder {
+    color: var(--color-placeholder);
+}
+
+/* Botón que despliega el panel de filtros */
+.busqueda-avanzada {
+    width: 100%;
+    background: var(--color-boton);
+    color: var(--color-texto);
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-left: 1px solid var(--color-borde);
+    border-right: 1px solid var(--color-borde);
+    border-bottom: 1px solid var(--color-borde);
+    margin: 0;
+}
+
+/* Panel desplegable de filtros (oculto por defecto) */
+.panel-filtros {
+    display: none;
+    width: 100%;
+    background: var(--color-panel-oscuro);
+    border-left: 1px solid var(--color-borde);
+    border-right: 1px solid var(--color-borde);
+    border-bottom: 1px solid var(--color-borde);
+    box-sizing: border-box;
+}
+
+/* Cada fila del panel de filtros */
+.fila-filtro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-top: 1px solid var(--color-separador);
+}
+
+/* Grupo etiqueta + botón dentro de una fila */
+.grupo-filtro {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fila-filtro span {
+    font-size: 14px;
+}
+
+/* Botones dentro del panel de filtros */
+.fila-filtro button {
+    padding: 6px 12px;
+    background: var(--color-boton);
+    color: var(--color-texto);
+    border: 1px solid #4f7ec7;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 13px;
+}
+
+.fila-filtro button:hover {
+    background: var(--color-boton-hover);
+}
+
+/* Botón "Constructor de Deck" — lado derecho de la barra */
+/* Estilo prominente inspirado en "Open in Pack Simulator" */
+.btn-constructor {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: var(--color-primario);
+    color: #000e1f;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+    box-shadow: 0 4px 16px rgba(59, 144, 255, 0.35);
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.btn-constructor:hover {
+    background: #6aabff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(59, 144, 255, 0.5);
+}
+
+.btn-constructor:active {
+    transform: translateY(0);
+}
+
+.btn-constructor-icono {
+    font-size: 18px;
+    line-height: 1;
+}
+
+
+/* =============================================
+   8. PANEL DE INFORMACIÓN DE CARTA
+   Panel flotante estilo Duel Links Meta.
+   Imagen a la izquierda, datos a la derecha.
+   Se abre con click y se cierra con el botón X
+   o haciendo click fuera del panel.
+   Se posiciona con JS a izquierda o derecha
+   según el espacio disponible en pantalla.
+   ============================================= */
+
+/* Contenedor principal del panel */
+.panel-info {
+    display: none;              /* Oculto por defecto; JS lo muestra */
+    position: fixed;            /* Flota sobre el contenido */
+    width: 520px;
+    background: #0d1f35;
+    border: 2px solid var(--color-primario);
+    border-radius: 12px;
+    padding: 16px;
+
+    z-index: 1000;              /* Por encima de todo */
+    gap: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+    box-sizing: border-box;
+    flex-direction: row;        /* Imagen izquierda, datos derecha */
+    align-items: flex-start;
+}
+
+/* Botón X para cerrar el panel manualmente */
+.panel-cerrar {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: 1px solid var(--color-borde);
+    color: var(--color-texto);
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.panel-cerrar:hover {
+    background: var(--color-boton-hover);
+}
+
+/* Columna izquierda: imagen + badge de rareza */
+.panel-izquierda {
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Imagen grande de la carta */
+#imagenGrande {
+    width: 145px;
+    border-radius: 6px;
+    display: block;
+}
+
+/* Badge de rareza encima de la imagen (UR, SR...) */
+.panel-rareza-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #1a1a2e;
+    color: #f0c040;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 7px;
+    border-radius: 4px;
+    border: 1px solid #f0c040;
+    letter-spacing: 0.05em;
+}
+
+/* Columna derecha: todos los datos */
+.panel-datos {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+/* Fila superior: nombre + atributo/nivel */
+.panel-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* Nombre de la carta */
+.panel-cabecera h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #ffffff;
+    line-height: 1.2;
+    flex: 1;
+}
+
+/* Atributo y nivel alineados a la derecha */
+.panel-atributo-nivel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    font-size: 13px;
+    color: #cccccc;
+    white-space: nowrap;
+}
+
+/* Icono de nivel (estrella) */
+.panel-atributo-nivel .nivel-icono {
+    color: #f0c040;
+    font-size: 14px;
+}
+
+/* Tipo de carta: [ Spellcaster / Effect ] */
+.panel-tipo {
+    margin: 0;
+    font-size: 14px;
+    color: #aaccff;
+    font-style: italic;
+}
+
+/* Bloque de descripción: requirement y effect */
+.panel-descripcion {
+    font-size: 13px;
+    color: #dddddd;
+    line-height: 1.6;
+    border-top: 1px solid #1e3a5f;
+    padding-top: 8px;
+}
+
+/* ATK / DEF */
+.panel-stats {
+    margin: 0;
+    font-size: 15px;
+    color: #ffffff;
+    font-weight: bold;
+    border-top: 1px solid #1e3a5f;
+    padding-top: 8px;
+}
+
+/* Precio */
+.panel-precio {
+    margin: 0;
+    font-size: 13px;
+    color: #88bbff;
+    border-top: 1px solid #1e3a5f;
+    padding-top: 8px;
+}
+
+
+/* =============================================
+   9. ESTILOS DE TEXTO DE EFECTOS
+   Colores para las etiquetas Rush Duel en
+   la descripción de las cartas.
+   ============================================= */
+
+/* Etiqueta [REQUIREMENT] en amarillo */
+.requirement {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+/* Etiqueta [EFFECT] en azul claro */
+.effect {
+    color: #00d4ff;
+    font-weight: bold;
+}
+
+
+/* =============================================
+   10. NAV (reservado, sin uso activo)
+   ============================================= */
+
+nav {
+    background: #333;
+    text-align: center;
+    padding: 10px;
+}
+
+nav button {
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+
+
+
+/* =============================================
+   12. SECCIÓN DECKS - CONSTRUCTOR
+   Panel izquierdo: zona del deck (vacío).
+   Panel derecho: cartas disponibles para agregar.
+   ============================================= */
+
+/* Layout principal: ocupa todo el ancho de la sección */
+.deck-constructor {
+    display: flex;
+    gap: 0;
+    margin-top: 0;
+    align-items: stretch;
+    height: calc(100vh - 54px); /* 54px = altura de .deck-cabecera */
+}
+
+/* Panel izquierdo: crece para llenar el espacio disponible */
+.deck-zona {
+    flex: 1;
+    min-width: 0;
+    background: #072240;
+    border-right: 2px solid var(--color-primario);
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.deck-zona h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: var(--color-primario);
+    border-bottom: 1px solid var(--color-separador);
+    padding-bottom: 6px;
+}
+
+/* Fila de contadores: cartas y costo DP */
+.deck-contadores {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+/* Contador de cartas en el deck */
+.deck-contador {
+    font-size: 13px;
+    color: #aaaaaa;
+    margin-bottom: 0;
+}
+
+/* Contador de costo total DP */
+.deck-costo {
+    font-size: 13px;
+    color: #88bbff;
+    margin-bottom: 0;
+}
+
+/* Rejilla del deck: 10 columnas con cartas un poco más grandes */
+.deck-cartas {
+    display: grid;
+    grid-template-columns: repeat(10, 64px);
+    gap: 5px;
+    align-content: start;
+}
+
+/* Cada carta miniatura dentro del deck */
+.deck-carta-item {
+    display: block;
+    cursor: pointer;
+    width: 64px;
+    border-radius: 3px;
+}
+
+/* Imagen de carta en el deck */
+.deck-carta-item img {
+    width: 64px;
+    display: block;
+    border-radius: 3px;
+    transition: opacity 0.15s;
+}
+
+.deck-carta-item img:hover {
+    opacity: 0.7;
+}
+
+/* Badge de cantidad eliminado: ahora cada copia es una imagen separada */
+
+/* Panel derecho: altura completa, anchura generosa */
+.deck-disponibles {
+    width: 460px;           /* más ancho para que 2 columnas no hagan scroll horizontal */
+    flex-shrink: 0;
+    background: #060f20;
+    border-left: 1px solid var(--color-borde);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.deck-disponibles h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: var(--color-primario);
+    border-bottom: 1px solid var(--color-separador);
+    padding-bottom: 6px;
+    flex-shrink: 0;
+}
+
+/* Estilos del buscador y filtros del constructor */
+.deck-filtros {
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+#deckBusqueda {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 13px;
+    background: var(--color-panel);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+}
+
+#deckBusqueda::placeholder {
+    color: var(--color-placeholder);
+}
+
+.deck-filtros-botones {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.deck-filtros-botones button {
+    flex: 1;
+    padding: 4px 6px;
+    background: var(--color-boton);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.deck-filtros-botones button:hover,
+.deck-filtros-botones button.activo-deck {
+    background: var(--color-primario);
+    color: #000;
+    border-color: var(--color-primario);
+}
+
+/* Lista de cartas: grid de 2 columnas con scroll */
+#deckLista {
+    overflow-y: auto;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    align-content: start;
+}
+
+/* Cada fila de carta disponible: imagen + nombre (click agrega) */
+.deck-fila-carta {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 6px;
+    border: 1px solid var(--color-separador);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+}
+
+.deck-fila-carta:hover {
+    background: #112840;
+    border-color: var(--color-primario);
+}
+
+.deck-fila-carta:active {
+    background: #1a3a60;
+}
+
+.deck-fila-carta img {
+    width: 36px;     /* Más pequeño que antes (52px) */
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.deck-fila-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.deck-fila-info .deck-nombre {
+    font-size: 11px;
+    font-weight: bold;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+.deck-fila-info .deck-tipo-rareza {
+    font-size: 10px;
+    color: #8899bb;
+    margin-top: 1px;
+}
+
+/* Botón para vaciar el deck */
+.deck-btn-vaciar {
+    margin-top: 8px;
+    padding: 7px 16px;
+    background: transparent;
+    border: 1px solid #cc3333;
+    color: #cc3333;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.15s;
+}
+
+.deck-btn-vaciar:hover {
+    background: rgba(204, 51, 51, 0.15);
+}
+
+/* =============================================
+   11. RESPONSIVE
+   El panel de info y el buscador tenían anchos
+   fijos que se salían de pantalla en móvil.
+   Aquí se adaptan al ancho disponible.
+   ============================================= */
+
+@media (max-width: 768px) {
+
+    /* Tarjetas del menú a ancho completo */
+    .tarjeta-menu {
+        width: 90vw;
+        height: 130px;
+    }
+
+    /* ---- TIENDA EN MÓVIL ---- */
+
+    /* La barra superior se apila en columna */
+    .tienda-barra {
+        flex-direction: column;
+        padding: 12px 4% 0 4%;
+        gap: 10px;
+    }
+
+    /* Filtros y buscador a ancho completo */
+    .tienda-barra-izq {
+        width: 100%;
+    }
+
+    .filtros,
+    #busqueda {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Botón constructor también ancho completo */
+    .btn-constructor {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Las cartas se muestran en una sola columna, centradas */
+    .lista-cartas {
+        width: 96%;
+        grid-template-columns: repeat(3, 1fr); /* 3 por fila en móvil */
+        gap: 8px;
+        padding: 12px;
+    }
+
+    /* Las cartas llenan la celda del grid */
+    .carta-mini {
+        width: 100%;
+        height: auto;
+    }
+
+    /* El badge de rareza se escala con la carta */
+    .rareza {
+        width: 40px;
+    }
+
+    /* Título de sección más pequeño */
+    .titulo-seccion {
+        width: 96%;
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+
+    /* Panel info en móvil: centrado vertical y horizontal en pantalla */
+    .panel-info {
+        width: 92vw;
+        left: 4vw !important;
+        right: auto;
+        top: 50% !important;
+        transform: translateY(-50%);
+        flex-direction: row;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    #imagenGrande {
+        width: 90px;
+    }
+
+
+}
