@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yu-Gi-Oh! Rush Duel Rol</title>
+
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+    <!-- ===================================== -->
+    <!-- CABECERA                              -->
+    <!-- El banner se muestra solo via CSS     -->
+    <!-- (background-image en estilos.css).    -->
+    <!-- ===================================== -->
+
+    <header></header>
+
+    <!-- Subtítulo debajo del banner -->
+    <div class="banner-subtitulo">
+        <span>Página Oficial del Rol de Yu-Gi-Oh!</span>
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- MENÚ PRINCIPAL                        -->
+    <!-- Cada tarjeta llama a mostrar('id')    -->
+    <!-- para mostrar la sección indicada.     -->
+    <!-- ===================================== -->
+
+    <div id="menuPrincipal" class="menu-principal">
+
+        <!-- Tarjeta: TIENDA -->
+        <div class="tarjeta-menu"
+             onclick="mostrar('tienda')">
+            <img src="img/menu/tienda.jpg" alt="Tienda">
+            <div class="texto-menu">
+                <h2>TIENDA</h2>
+                <p>Compra cartas y sobres.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: COMO JUGAR -->
+        <div class="tarjeta-menu"
+             onclick="mostrar('comojugar')">
+            <img src="img/menu/rushduel.jpg" alt="Cómo jugar">
+            <div class="texto-menu">
+                <h2>COMO JUGAR</h2>
+                <p>Aprende las reglas Rush Duel.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: RANKING (oculta temporalmente) -->
+        <div class="tarjeta-menu tarjeta-oculta"
+             onclick="mostrar('ranking')">
+            <img src="img/menu/ranking.jpg" alt="Ranking">
+            <div class="texto-menu">
+                <h2>RANKING</h2>
+                <p>Los mejores duelistas.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: LUGARES (oculta temporalmente) -->
+        <div class="tarjeta-menu tarjeta-oculta"
+             onclick="mostrar('lugares')">
+            <img src="img/menu/lugares.jpg" alt="Lugares">
+            <div class="texto-menu">
+                <h2>LUGARES</h2>
+                <p>Explora ciudades y zonas del rol.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: DECKS -->
+        <div class="tarjeta-menu"
+             onclick="mostrar('decks')">
+            <img src="img/menu/decks.jpg" alt="Decks">
+            <div class="texto-menu">
+                <h2>DECKS</h2>
+                <p>Consulta los decks registrados.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: LORE (oculta temporalmente) -->
+        <div class="tarjeta-menu tarjeta-oculta"
+             onclick="mostrar('lore')">
+            <img src="img/menu/lore.jpg" alt="Lore">
+            <div class="texto-menu">
+                <h2>LORE</h2>
+                <p>Historia del mundo y sus personajes.</p>
+            </div>
+        </div>
+
+    </div>
+    <!-- FIN MENÚ PRINCIPAL -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: TIENDA                       -->
+    <!-- Muestra las cartas disponibles con    -->
+    <!-- buscador y filtros por tipo y rareza. -->
+    <!-- Las cartas las genera script.js.      -->
+    <!-- ===================================== -->
+
+    <section id="tienda">
+
+        <!-- ======================================
+             BARRA SUPERIOR DE LA TIENDA
+             Buscador + filtros a la izquierda,
+             botón Constructor de Deck a la derecha.
+             Alineada con el ancho de las cartas.
+        ======================================= -->
+        <div class="tienda-barra">
+
+            <!-- Lado izquierdo: volver + buscador + filtros -->
+            <div class="tienda-barra-izq">
+
+                <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+                <!-- Buscador por nombre -->
+                <div class="filtros">
+                    <input
+                        type="text"
+                        id="busqueda"
+                        placeholder="Buscar cartas..."
+                        onkeyup="actualizarFiltros()">
+
+                    <div
+                        id="botonFiltros"
+                        class="busqueda-avanzada"
+                        onclick="toggleFiltros()">
+                        ▼ Búsqueda Avanzada ▼
+                    </div>
+
+                    <!-- Panel desplegable (oculto por defecto) -->
+                    <div id="panelFiltros" class="panel-filtros">
+
+                        <!-- Fila 1: Monstruos / UR -->
+                        <div class="fila-filtro">
+                            <div class="grupo-filtro">
+                                <span>Monstruos</span>
+                                <button onclick="filtrarCategoria('MONSTER')">Filtrar</button>
+                            </div>
+                            <div class="grupo-filtro">
+                                <span>UR</span>
+                                <button onclick="filtrarRareza('UR')">Filtrar</button>
+                            </div>
+                        </div>
+
+                        <!-- Fila 2: Magias / SR -->
+                        <div class="fila-filtro">
+                            <div class="grupo-filtro">
+                                <span>Magias</span>
+                                <button onclick="filtrarCategoria('SPELL')">Filtrar</button>
+                            </div>
+                            <div class="grupo-filtro">
+                                <span>SR</span>
+                                <button onclick="filtrarRareza('SR')">Filtrar</button>
+                            </div>
+                        </div>
+
+                        <!-- Fila 3: Trampas / GRATIS -->
+                        <div class="fila-filtro">
+                            <div class="grupo-filtro">
+                                <span>Trampas</span>
+                                <button onclick="filtrarCategoria('TRAP')">Filtrar</button>
+                            </div>
+                            <div class="grupo-filtro">
+                                <span>Gratis</span>
+                                <button onclick="filtrarRareza('GRATIS')">Filtrar</button>
+                            </div>
+                        </div>
+
+                        <!-- Fila 4: Mostrar todas -->
+                        <div class="fila-filtro">
+                            <span>Todas</span>
+                            <button onclick="limpiarFiltros()">Mostrar todas</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Lado derecho: botón ir al constructor de deck -->
+            <button class="btn-constructor" onclick="mostrar('decks')">
+                <span class="btn-constructor-icono">⚙</span>
+                Constructor de Deck
+            </button>
+
+        </div>
+        <!-- FIN BARRA SUPERIOR -->
+
+        <!-- Contenedor donde generarTienda() inyecta las cartas -->
+        <div class="contenedor-tienda">
+            <div id="listaCartas"></div>
+        </div>
+
+    </section>
+    <!-- FIN SECCIÓN TIENDA -->
+
+
+    <!-- ===================================== -->
+    <!-- PANEL DE INFORMACIÓN DE CARTA         -->
+    <!-- Aparece al hacer CLICK sobre una      -->
+    <!-- carta en la tienda. Se posiciona a    -->
+    <!-- izquierda o derecha según el espacio  -->
+    <!-- disponible. Lo gestiona               -->
+    <!-- mostrarCarta() en script.js.          -->
+    <!-- Se cierra con el botón X o haciendo   -->
+    <!-- click fuera del panel.                -->
+    <!-- Estructura: imagen izquierda,         -->
+    <!-- datos derecha (estilo Duel Links Meta) -->
+    <!-- ===================================== -->
+
+    <div id="panelInfo" class="panel-info" onclick="if(esMobil()) ocultarCarta()">
+
+        <!-- Columna izquierda: imagen grande + rareza -->
+        <div class="panel-izquierda">
+            <img id="imagenGrande" src="img/blueeyes.jpg" alt="Carta ampliada">
+            <span id="panelRareza" class="panel-rareza-badge"></span>
+        </div>
+
+        <!-- Columna derecha: todos los datos -->
+        <div class="panel-datos">
+
+            <!-- Fila superior: nombre + atributo y nivel -->
+            <div class="panel-cabecera">
+                <h2 id="nombreCarta"></h2>
+                <div id="panelAtributoNivel" class="panel-atributo-nivel"></div>
+            </div>
+
+            <!-- Tipo: [ Spellcaster / Effect ] -->
+            <p id="tipoCarta" class="panel-tipo"></p>
+
+            <!-- Descripción: requirement y effect con colores -->
+            <div id="descripcionCarta" class="panel-descripcion"></div>
+
+            <!-- ATK / DEF (solo monstruos) -->
+            <p id="statsCarta" class="panel-stats"></p>
+
+            <!-- Precio -->
+            <p id="precioCarta" class="panel-precio"></p>
+
+        </div>
+
+    </div>
+    <!-- FIN PANEL DE INFORMACIÓN -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: COMO JUGAR                   -->
+    <!-- Reglas básicas de Rush Duel.          -->
+    <!-- Puedes ampliarla con imágenes         -->
+    <!-- o ejemplos más adelante.              -->
+    <!-- ===================================== -->
+
+    <section id="comojugar">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Cómo jugar Rush Duel</h2>
+
+        <p>
+            Los Rush Duel permiten Invocaciones Normales
+            ilimitadas durante tu turno.
+        </p>
+
+        <p>
+            Cuando tu mano tiene menos de 5 cartas,
+            robas hasta tener 5.
+        </p>
+
+        <p>
+            Gana quien reduzca los LP del rival a 0.
+        </p>
+
+    </section>
+    <!-- FIN SECCIÓN COMO JUGAR -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: DECKS                        -->
+    <!-- Lista de decks registrados.           -->
+    <!-- Por completar.                        -->
+    <!-- ===================================== -->
+
+    <section id="decks">
+
+        <!-- Barra de cabecera: botón volver + título, sin banner encima -->
+        <div class="deck-cabecera">
+            <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+            <h2>Constructor de Deck</h2>
+        </div>
+
+        <!-- Layout: zona del deck (izq) + cartas disponibles (der) -->
+        <div class="deck-constructor">
+
+            <!-- Panel izquierdo: deck en construcción -->
+            <div class="deck-zona">
+                <h3>Mi Deck</h3>
+                <!-- Fila de contadores: cantidad de cartas y costo total -->
+                <div class="deck-contadores">
+                    <div class="deck-contador" id="deckContador">0 / 40 cartas</div>
+                    <div class="deck-costo" id="deckCosto">Costo: 0 DP</div>
+                </div>
+                <!-- Las cartas añadidas aparecen aquí (generado por JS) -->
+                <div class="deck-cartas" id="deckCartas"></div>
+                <button class="deck-btn-vaciar" onclick="vaciarDeck()">Vaciar deck</button>
+            </div>
+
+            <!-- Panel derecho: cartas disponibles para agregar -->
+            <div class="deck-disponibles">
+                <h3>Cartas disponibles</h3>
+
+                <!-- Buscador y filtros del constructor -->
+                <div class="deck-filtros">
+                    <input
+                        type="text"
+                        id="deckBusqueda"
+                        placeholder="Buscar..."
+                        onkeyup="filtrarListaDecks()">
+                    <div class="deck-filtros-botones">
+                        <button onclick="filtrarDeckCategoria('MONSTER')">Monstruos</button>
+                        <button onclick="filtrarDeckCategoria('SPELL')">Magias</button>
+                        <button onclick="filtrarDeckCategoria('TRAP')">Trampas</button>
+                        <button onclick="filtrarDeckCategoria('')">Todas</button>
+                    </div>
+                </div>
+
+                <!-- Lista generada por JS con todas las cartas -->
+                <div id="deckLista"></div>
+            </div>
+
+        </div>
+
+    </section>
+    <!-- FIN SECCIÓN DECKS -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: JUGADORES                    -->
+    <!-- Lista de duelistas del rol.           -->
+    <!-- Por completar.                        -->
+    <!-- (Sin tarjeta en el menú por ahora)    -->
+    <!-- ===================================== -->
+
+    <section id="jugadores">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Jugadores</h2>
+
+        <p>
+            Lista de duelistas.
+        </p>
+
+    </section>
+    <!-- FIN SECCIÓN JUGADORES -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: RANKING                      -->
+    <!-- Puntuaciones de los duelistas.        -->
+    <!-- Actualizar manualmente o conectar     -->
+    <!-- a una base de datos más adelante.     -->
+    <!-- ===================================== -->
+
+    <section id="ranking">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Ranking</h2>
+
+        <!-- Lista ordenada por puntos -->
+        <ol>
+            <li>Yuga - 1500 pts</li>
+            <li>Luke - 1200 pts</li>
+            <li>Romin - 1000 pts</li>
+        </ol>
+
+    </section>
+    <!-- FIN SECCIÓN RANKING -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: LUGARES                      -->
+    <!-- Ciudades, tiendas y zonas del rol.    -->
+    <!-- Por completar.                        -->
+    <!-- ===================================== -->
+
+    <section id="lugares">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Lugares</h2>
+
+        <p>
+            Aquí aparecerán las ciudades,
+            tiendas y zonas importantes.
+        </p>
+
+    </section>
+    <!-- FIN SECCIÓN LUGARES -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: LORE                         -->
+    <!-- Historia del mundo del rol.           -->
+    <!-- Por completar.                        -->
+    <!-- ===================================== -->
+
+    <section id="lore">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Lore</h2>
+
+        <p>
+            Historia principal del mundo.
+        </p>
+
+    </section>
+    <!-- FIN SECCIÓN LORE -->
+
+    <!-- ===================================== -->
+    <!-- JAVASCRIPT                            -->
+    <!-- Al final del body para que el HTML    -->
+    <!-- esté cargado antes de que el JS       -->
+    <!-- intente acceder al DOM.               -->
+    <!-- ===================================== -->
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
