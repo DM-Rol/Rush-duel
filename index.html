@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yu-Gi-Oh! Rush Duel Rol</title>
+
+    <!-- Icono de la pestaña del navegador (favicon).
+         Guarda la imagen en img/favicon.png (cuadrada, ej. 512x512). -->
+    <link rel="icon" type="image/png" href="img/favicon.png">
+
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+    <!-- ===================================== -->
+    <!-- CABECERA                              -->
+    <!-- El banner se muestra solo via CSS     -->
+    <!-- (background-image en estilos.css).    -->
+    <!-- ===================================== -->
+
+    <header></header>
+
+    <!-- Subtítulo debajo del banner -->
+    <div class="banner-subtitulo">
+        <span>Página Oficial del Rol de Yu-Gi-Oh!</span>
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- MENÚ PRINCIPAL                        -->
+    <!-- Cada tarjeta llama a mostrar('id')    -->
+    <!-- para mostrar la sección indicada.     -->
+    <!-- ===================================== -->
+
+    <div id="menuPrincipal" class="menu-principal">
+
+        <!-- Tarjeta: TIENDA -->
+        <div class="tarjeta-menu"
+             onclick="mostrar('tienda')">
+            <img src="img/menu/tienda.jpg" alt="Tienda">
+            <div class="texto-menu">
+                <h2>TIENDA</h2>
+                <p>Compra cartas y sobres.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: COMO JUGAR -->
+        <div class="tarjeta-menu"
+             onclick="mostrar('comojugar')">
+            <img src="img/menu/rushduel.jpg" alt="Cómo jugar">
+            <div class="texto-menu">
+                <h2>COMO JUGAR</h2>
+                <p>Aprende las reglas Rush Duel.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: RANKING (oculta temporalmente) -->
+        <div class="tarjeta-menu tarjeta-oculta"
+             onclick="mostrar('ranking')">
+            <img src="img/menu/ranking.jpg" alt="Ranking">
+            <div class="texto-menu">
+                <h2>RANKING</h2>
+                <p>Los mejores duelistas.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: LUGARES (oculta temporalmente) -->
+        <div class="tarjeta-menu tarjeta-oculta"
+             onclick="mostrar('lugares')">
+            <img src="img/menu/lugares.jpg" alt="Lugares">
+            <div class="texto-menu">
+                <h2>LUGARES</h2>
+                <p>Explora ciudades y zonas del rol.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: DECKS -->
+        <div class="tarjeta-menu"
+             onclick="mostrar('decks')">
+            <img src="img/menu/decks.jpg" alt="Decks">
+            <div class="texto-menu">
+                <h2>DECKS</h2>
+                <p>Consulta los decks registrados.</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta: LORE (oculta temporalmente) -->
+        <div class="tarjeta-menu tarjeta-oculta"
+             onclick="mostrar('lore')">
+            <img src="img/menu/lore.jpg" alt="Lore">
+            <div class="texto-menu">
+                <h2>LORE</h2>
+                <p>Historia del mundo y sus personajes.</p>
+            </div>
+        </div>
+
+    </div>
+    <!-- FIN MENÚ PRINCIPAL -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: TIENDA                       -->
+    <!-- Muestra las cartas disponibles con    -->
+    <!-- buscador y filtros por tipo y rareza. -->
+    <!-- Las cartas las genera script.js.      -->
+    <!-- ===================================== -->
+
+    <section id="tienda">
+
+        <!-- ======================================
+             BARRA SUPERIOR DE LA TIENDA
+             Buscador + filtros a la izquierda,
+             botón Constructor de Deck a la derecha.
+             Alineada con el ancho de las cartas.
+        ======================================= -->
+        <div class="tienda-barra">
+
+            <!-- Lado izquierdo: volver + buscador + filtros -->
+            <div class="tienda-barra-izq">
+
+                <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+                <!-- Buscador por nombre -->
+                <div class="filtros">
+                    <input
+                        type="text"
+                        id="busqueda"
+                        placeholder="Buscar cartas..."
+                        onkeyup="actualizarFiltros()">
+
+                    <div
+                        id="botonFiltros"
+                        class="busqueda-avanzada"
+                        onclick="toggleFiltros()">
+                        ▼ Búsqueda Avanzada ▼
+                    </div>
+
+                    <!-- Panel desplegable (oculto por defecto) -->
+                    <div id="panelFiltros" class="panel-filtros">
+
+                        <!-- Fila 1: Monstruos / UR -->
+                        <div class="fila-filtro">
+                            <div class="grupo-filtro">
+                                <span>Monstruos</span>
+                                <button onclick="filtrarCategoria('MONSTER')">Filtrar</button>
+                            </div>
+                            <div class="grupo-filtro">
+                                <span>UR</span>
+                                <button onclick="filtrarRareza('UR')">Filtrar</button>
+                            </div>
+                        </div>
+
+                        <!-- Fila 2: Magias / SR -->
+                        <div class="fila-filtro">
+                            <div class="grupo-filtro">
+                                <span>Magias</span>
+                                <button onclick="filtrarCategoria('SPELL')">Filtrar</button>
+                            </div>
+                            <div class="grupo-filtro">
+                                <span>SR</span>
+                                <button onclick="filtrarRareza('SR')">Filtrar</button>
+                            </div>
+                        </div>
+
+                        <!-- Fila 3: Trampas / GRATIS -->
+                        <div class="fila-filtro">
+                            <div class="grupo-filtro">
+                                <span>Trampas</span>
+                                <button onclick="filtrarCategoria('TRAP')">Filtrar</button>
+                            </div>
+                            <div class="grupo-filtro">
+                                <span>Gratis</span>
+                                <button onclick="filtrarRareza('GRATIS')">Filtrar</button>
+                            </div>
+                        </div>
+
+                        <!-- Fila 4: Mostrar todas -->
+                        <div class="fila-filtro">
+                            <span>Todas</span>
+                            <button onclick="limpiarFiltros()">Mostrar todas</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Lado derecho: botón ir al constructor de deck -->
+            <button class="btn-constructor" onclick="mostrar('decks')">
+                <span class="btn-constructor-icono">⚙</span>
+                Constructor de Deck
+            </button>
+
+        </div>
+        <!-- FIN BARRA SUPERIOR -->
+
+        <!-- Contenedor donde generarTienda() inyecta las cartas -->
+        <div class="contenedor-tienda">
+            <div id="listaCartas"></div>
+        </div>
+
+    </section>
+    <!-- FIN SECCIÓN TIENDA -->
+
+
+    <!-- ===================================== -->
+    <!-- PANEL DE INFORMACIÓN DE CARTA         -->
+    <!-- Aparece al hacer CLICK sobre una      -->
+    <!-- carta en la tienda. Se posiciona a    -->
+    <!-- izquierda o derecha según el espacio  -->
+    <!-- disponible. Lo gestiona               -->
+    <!-- mostrarCarta() en script.js.          -->
+    <!-- Se cierra con el botón X o haciendo   -->
+    <!-- click fuera del panel.                -->
+    <!-- Estructura: imagen izquierda,         -->
+    <!-- datos derecha (estilo Duel Links Meta) -->
+    <!-- ===================================== -->
+
+    <div id="panelInfo" class="panel-info" onclick="if(esMobil()) ocultarCarta()">
+
+        <!-- Columna izquierda: imagen grande + rareza -->
+        <div class="panel-izquierda">
+            <img id="imagenGrande" src="img/blueeyes.jpg" alt="Carta ampliada">
+            <span id="panelRareza" class="panel-rareza-badge"></span>
+        </div>
+
+        <!-- Columna derecha: todos los datos -->
+        <div class="panel-datos">
+
+            <!-- Fila superior: nombre + atributo y nivel -->
+            <div class="panel-cabecera">
+                <h2 id="nombreCarta"></h2>
+                <div id="panelAtributoNivel" class="panel-atributo-nivel"></div>
+            </div>
+
+            <!-- Tipo: [ Spellcaster / Effect ] -->
+            <p id="tipoCarta" class="panel-tipo"></p>
+
+            <!-- Descripción: requirement y effect con colores -->
+            <div id="descripcionCarta" class="panel-descripcion"></div>
+
+            <!-- ATK / DEF (solo monstruos) -->
+            <p id="statsCarta" class="panel-stats"></p>
+
+            <!-- Precio -->
+            <p id="precioCarta" class="panel-precio"></p>
+
+        </div>
+
+    </div>
+    <!-- FIN PANEL DE INFORMACIÓN -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: COMO JUGAR                   -->
+    <!-- Reglas básicas de Rush Duel.          -->
+    <!-- Puedes ampliarla con imágenes         -->
+    <!-- o ejemplos más adelante.              -->
+    <!-- ===================================== -->
+
+    <section id="comojugar">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <!-- =====================================================
+             GUÍA "CÓMO JUGAR RUSH DUEL"
+             IMPORTANTE: dentro de la guía NO se usan <section>,
+             <header> ni <nav>, porque el CSS de la página aplica
+             estilos globales a esas etiquetas. Solo <div>.
+
+             Imágenes que debes añadir tú (carpeta img/ayuda/):
+               - campo.png       -> el campo de duelo con sus zonas
+               - posiciones.png  -> Posición de Ataque / Defensa
+             Mientras no existan, la página muestra un recuadro
+             punteado con el nombre del archivo que falta.
+        ====================================================== -->
+        <div class="guia">
+
+            <!-- ============ PORTADA ============ -->
+            <div class="guia-hero">
+                <p class="guia-etiqueta">GUÍA DEL DUELISTA</p>
+                <h2>Cómo jugar Rush Duel</h2>
+                <p class="guia-intro">
+                    Rush Duel es una forma de jugar Yu-Gi-Oh! pensada para que los duelos sean
+                    <strong>rápidos, claros y fáciles de aprender</strong>. Puedes invocar todos los
+                    monstruos que quieras en un mismo turno, robas hasta tener 5 cartas en la mano y cada
+                    carta separa lo que necesitas cumplir
+                    (<span class="requirement">[REQUISITO]</span>) de lo que consigues
+                    (<span class="effect">[EFECTO]</span>). Menos reglas, más acción.
+                </p>
+
+                <div class="guia-datos">
+                    <div class="guia-dato"><strong>8000</strong><span>Puntos de vida (LP)</span></div>
+                    <div class="guia-dato"><strong>4</strong><span>Cartas en tu mano inicial</span></div>
+                    <div class="guia-dato"><strong>3</strong><span>Zonas de monstruo</span></div>
+                    <div class="guia-dato"><strong>4</strong><span>Fases por turno</span></div>
+                </div>
+            </div>
+
+            <!-- ============ ÍNDICE ============ -->
+            <div class="guia-indice">
+                <a href="#guia-objetivo">Objetivo</a>
+                <a href="#guia-cartas">Tipos de cartas</a>
+                <a href="#guia-turno">Fases del turno</a>
+                <a href="#guia-campo">El campo</a>
+                <a href="#guia-invocar">Invocaciones</a>
+                <a href="#guia-combate">Posiciones y combate</a>
+                <a href="#guia-legend">Cartas Legend</a>
+                <a href="#guia-extra">Reglas extras</a>
+            </div>
+
+
+            <!-- ============ 1. OBJETIVO ============ -->
+            <div class="guia-seccion" id="guia-objetivo">
+                <h3 class="guia-titulo"><span class="guia-num">1</span> ¿Cuál es el objetivo del juego?</h3>
+
+                <p class="guia-texto">
+                    El objetivo es derrotar a tu oponente reduciendo sus puntos de vida, conocidos como
+                    <strong>LP (Life Points)</strong>, de <strong>8000 a 0</strong>.
+                </p>
+
+                <p class="guia-texto">Existen tres maneras principales de ganar:</p>
+
+                <ol class="guia-lista">
+                    <li>Reducir los LP del oponente a 0.</li>
+                    <li>Hacer que el oponente tenga que robar una carta y no pueda porque su Deck está vacío.</li>
+                    <li>Ganar mediante el efecto especial de alguna carta que indique expresamente que ganas el duelo.</li>
+                </ol>
+
+                <div class="guia-nota">
+                    Si ambos jugadores llegan a 0 LP simultáneamente, el duelo termina en <strong>empate</strong>.
+                </div>
+            </div>
+
+
+            <!-- ============ 2. TIPOS DE CARTAS ============ -->
+            <div class="guia-seccion" id="guia-cartas">
+                <h3 class="guia-titulo"><span class="guia-num">2</span> Tipos de cartas</h3>
+
+                <p class="guia-texto">
+                    En Rush Duel solo necesitas conocer tres tipos de cartas:
+                    <strong>monstruos</strong>, <strong>magias</strong> y <strong>trampas</strong>.
+                </p>
+
+                <!-- ---------- A. MONSTRUOS ---------- -->
+                <h4 class="guia-subtitulo">A. Cartas de monstruo</h4>
+
+                <!-- Monstruo normal -->
+                <div class="guia-carta-fila">
+                    <div class="guia-carta-img">
+                        <img src="img/cartas/dragorite.jpg" alt="Dragorite, un monstruo normal">
+                    </div>
+                    <div class="guia-carta-texto">
+                        <h5>Monstruos normales</h5>
+                        <p>Son monstruos que no tienen efectos especiales. Su utilidad está principalmente en sus puntos de ataque y defensa.</p>
+                        <p>No necesitan cumplir condiciones para utilizar un efecto porque no tienen ninguno. El texto de la carta solo cuenta su historia.</p>
+                        <p class="guia-ejemplo">
+                            <strong>Ejemplo: Dragorite.</strong> Es un monstruo normal de Nivel 4 con 1500 de ATK y 0 de DEF.
+                            Lo Invocas y atacas con él: no hay nada más que activar.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Monstruo de efecto (con partes numeradas) -->
+                <div class="guia-carta-fila">
+                    <div class="guia-carta-img anotada">
+                        <div class="carta-anotada">
+                            <img src="img/cartas/sevens.jpg" alt="Sevens Road Magician con sus partes numeradas">
+                            <span class="marca m1">1</span>
+                            <span class="marca m2">2</span>
+                            <span class="marca m3">3</span>
+                            <span class="marca m4">4</span>
+                            <span class="marca m5">5</span>
+                            <span class="marca m6">6</span>
+                        </div>
+                    </div>
+                    <div class="guia-carta-texto">
+                        <h5>Monstruos de efecto</h5>
+                        <p>Poseen habilidades especiales que pueden ayudarte durante el duelo.</p>
+                        <p>Por ejemplo, pueden aumentar su ATK, destruir cartas, robar cartas, recuperar monstruos del Cementerio o debilitar al rival.</p>
+                        <p class="guia-ejemplo">
+                            <strong>Ejemplo: Sevens Road Magician.</strong> Es un monstruo de efecto de Nivel 7 con 2100 de ATK y 1500 de DEF.
+                            Su efecto se divide en dos partes, que verás explicadas más abajo.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Partes de la carta (corresponden a los números de la imagen) -->
+                <h4 class="guia-subtitulo">Las partes de una carta de monstruo</h4>
+                <p class="guia-texto">Los números de la carta de arriba señalan cada una de estas partes:</p>
+
+                <div class="guia-partes">
+                    <div class="guia-parte">
+                        <span class="marca-num">1</span>
+                        <div><strong>Nombre</strong><p>El nombre de la carta.</p></div>
+                    </div>
+                    <div class="guia-parte">
+                        <span class="marca-num">2</span>
+                        <div><strong>Atributo</strong><p>Hay seis: LUZ, OSCURIDAD, TIERRA, AGUA, FUEGO y VIENTO.</p></div>
+                    </div>
+                    <div class="guia-parte">
+                        <span class="marca-num">3</span>
+                        <div><strong>Nivel</strong><p>Cuanto más alto, más fuerte es el monstruo. Los de Nivel 5 o más necesitan Sacrificios para Invocarse.</p></div>
+                    </div>
+                    <div class="guia-parte">
+                        <span class="marca-num">4</span>
+                        <div><strong>ATK / DEF</strong><p><strong>ATK</strong> (Attack) son los puntos de ataque y <strong>DEF</strong> (Defense) los puntos de defensa.</p></div>
+                    </div>
+                    <div class="guia-parte">
+                        <span class="marca-num">5</span>
+                        <div><strong>Tipo</strong><p>Dragón, Guerrero, Lanzador de Conjuros... y si el monstruo es Normal o de Efecto.</p></div>
+                    </div>
+                    <div class="guia-parte">
+                        <span class="marca-num">6</span>
+                        <div><strong>Texto de la carta</strong><p>En los monstruos de efecto aquí están el [REQUISITO] y el [EFECTO].</p></div>
+                    </div>
+                </div>
+
+                <!-- Cómo funciona un efecto -->
+                <h4 class="guia-subtitulo">¿Cómo funciona un efecto?</h4>
+                <p class="guia-texto">
+                    Cada efecto tiene dos partes: primero cumples el <span class="requirement">[REQUISITO]</span>
+                    y después se aplica el <span class="effect">[EFECTO]</span>. Si no puedes cumplir el Requisito,
+                    no puedes activar la carta. Veámoslo con <strong>Sevens Road Magician</strong>:
+                </p>
+
+                <div class="guia-caja">
+                    <div class="guia-caja-fila">
+                        <span class="requirement">[REQUISITO]</span>
+                        <div>
+                            <p class="guia-cita">Manda al Cementerio la carta de la parte superior de tu Deck.</p>
+                            <p>Es lo que tienes que hacer para poder usar el efecto: tomas la carta de arriba de tu Deck y la envías al Cementerio.</p>
+                        </div>
+                    </div>
+                    <div class="guia-caja-fila">
+                        <span class="effect">[EFECTO]</span>
+                        <div>
+                            <p class="guia-cita">Esta carta gana ATK igual [al número de Atributos diferentes en tu Cementerio] x 300 hasta el final de este turno.</p>
+                            <p>Es lo que consigues. Si en tu Cementerio hay monstruos de 3 Atributos distintos, gana 900 de ATK
+                            (de 2100 pasa a 3000) hasta el final del turno.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="guia-lista-simple">
+                    <li><strong>Una vez por turno:</strong> el efecto de un monstruo puede activarse una vez por turno mientras la carta siga boca arriba en el campo.</li>
+                    <li><span class="condition">[CONDICIÓN]</span> Algunas cartas la incluyen: es una regla propia de la carta, por ejemplo, cómo puede Invocarse de Modo Especial desde tu mano.</li>
+                    <li><strong>Efecto Continuo:</strong> algunos monstruos lo tienen (viene indicado en la carta). No se activa: se aplica solo mientras la carta está boca arriba en el campo.</li>
+                </ul>
+
+
+                <!-- ---------- B. MAGIAS ---------- -->
+                <h4 class="guia-subtitulo">B. Cartas mágicas</h4>
+
+                <div class="guia-carta-fila">
+                    <div class="guia-carta-img">
+                        <img src="img/cartas/magicalstream.jpg" alt="Magical Stream, una carta mágica">
+                    </div>
+                    <div class="guia-carta-texto">
+                        <h5>Magias</h5>
+                        <p>Son cartas que se juegan directamente desde la mano para cambiar el rumbo del duelo. Al activarla se aplica su efecto y después va al Cementerio.</p>
+                        <p>Puedes activar todas las que quieras en tu turno, siempre que cumplas su Requisito. También puedes colocarlas boca abajo y activarlas más tarde.</p>
+
+                        <div class="guia-cita-caja">
+                            <p><span class="requirement">[REQUISITO]</span> Tienes un monstruo de Tipo Lanzador de Conjuros boca arriba en tu Campo.</p>
+                            <p><span class="effect">[EFECTO]</span> Destruye 1 Carta Mágica/de Trampa del Campo de tu adversario.</p>
+                        </div>
+                        <p class="guia-ejemplo">
+                            <strong>Ejemplo: Magical Stream.</strong> Si controlas un Lanzador de Conjuros, puedes usarla
+                            para destruir una Magia o Trampa de tu rival.
+                        </p>
+                        <p>Además de las Magias normales, existen las <strong>Magias de Campo</strong> (van en la Zona de Campo y su efecto se aplica mientras estén boca arriba) y las <strong>Magias de Equipo</strong> (se equipan a un monstruo).</p>
+                    </div>
+                </div>
+
+                <!-- ---------- C. TRAMPAS ---------- -->
+                <h4 class="guia-subtitulo">C. Cartas de trampa</h4>
+
+                <div class="guia-carta-fila">
+                    <div class="guia-carta-img">
+                        <img src="img/cartas/barrier.jpg" alt="The Barrier, una carta de trampa">
+                    </div>
+                    <div class="guia-carta-texto">
+                        <h5>Trampas</h5>
+                        <p>Son cartas especiales que también pueden activarse en el turno de tu oponente. Se usan colocándolas primero <strong>boca abajo</strong> en tu campo.</p>
+                        <p>No puedes activarla el mismo turno en que la colocas: podrás usarla desde el siguiente turno de tu oponente. Cada Trampa indica en su Requisito cuándo puede activarse (por ejemplo, cuando un monstruo rival declara un ataque). Después de usarla va al Cementerio.</p>
+
+                        <div class="guia-cita-caja">
+                            <p><span class="requirement">[REQUISITO]</span> Cuando un monstruo del adversario declara un ataque, baraja 1 monstruo desde tu Cementerio al Deck.</p>
+                            <p><span class="effect">[EFECTO]</span> El monstruo atacante pierde 400 de ATK hasta el final de este turno.</p>
+                        </div>
+                        <p class="guia-ejemplo">
+                            <strong>Ejemplo: The Barrier.</strong> Cuando tu rival ataca, barajas un monstruo de tu Cementerio
+                            al Deck y su monstruo atacante pierde 400 de ATK.
+                        </p>
+                        <p>Si dos o más Trampas pueden activarse al mismo tiempo, solo se activa una: decide primero el jugador al que no le toca el turno.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ============ 3. FASES DEL TURNO ============ -->
+            <div class="guia-seccion" id="guia-turno">
+                <h3 class="guia-titulo"><span class="guia-num">3</span> Las fases del turno</h3>
+
+                <p class="guia-texto">
+                    Los jugadores se turnan, y cada turno tiene <strong>4 fases</strong> que siempre ocurren en este orden:
+                </p>
+
+                <div class="guia-tarjetas">
+                    <div class="guia-tarjeta t1">
+                        <span class="guia-fase-num">1</span>
+                        <h5>Draw Phase</h5>
+                        <p>Robas cartas hasta tener <strong>5 en la mano</strong>. Si ya tienes 5 o más, robas 1 carta. No hay límite de cartas en la mano. El jugador que empieza también roba en su primer turno.</p>
+                    </div>
+                    <div class="guia-tarjeta t2">
+                        <span class="guia-fase-num">2</span>
+                        <h5>Main Phase</h5>
+                        <p>Aquí preparas tu estrategia: Invocas monstruos (todos los que quieras), cambias posiciones de batalla, activas efectos de monstruos, activas Magias y colocas Trampas.</p>
+                    </div>
+                    <div class="guia-tarjeta t3">
+                        <span class="guia-fase-num">3</span>
+                        <h5>Battle Phase</h5>
+                        <p>Atacas con tus monstruos en Posición de Ataque. Cada uno puede atacar <strong>una vez</strong> por turno. El jugador que empieza <strong>no tiene</strong> Battle Phase en su primer turno.</p>
+                    </div>
+                    <div class="guia-tarjeta t4">
+                        <span class="guia-fase-num">4</span>
+                        <h5>End Phase</h5>
+                        <p>Anuncias que terminas tu turno y pasa a tu oponente.</p>
+                    </div>
+                </div>
+
+                <div class="guia-nota azul">
+                    Cada jugador empieza el duelo con <strong>4 cartas</strong> en la mano. En Rush Duel no hay Standby Phase ni segunda Main Phase.
+                </div>
+            </div>
+
+
+            <!-- ============ 4. EL CAMPO ============ -->
+            <div class="guia-seccion" id="guia-campo">
+                <h3 class="guia-titulo"><span class="guia-num">4</span> El campo de duelo</h3>
+
+                <p class="guia-texto">
+                    El campo es el tablero donde se colocan las cartas. Cada jugador tiene su propio lado, con estas zonas:
+                </p>
+
+                <!-- Imagen del campo: la añades tú en img/ayuda/campo.png -->
+                <figure class="guia-figura" data-archivo="img/ayuda/campo.png">
+                    <img src="img/ayuda/campo.png" alt="El campo de duelo de Rush Duel con sus zonas"
+                         onerror="this.parentElement.classList.add('sin-imagen')">
+                    <figcaption>El campo de duelo y sus zonas</figcaption>
+                </figure>
+
+                <div class="guia-tarjetas">
+                    <div class="guia-tarjeta">
+                        <h5><span class="marca-num">1</span> Zonas de Monstruo (3)</h5>
+                        <p>Aquí Invocas de Modo Normal, Invocas de Modo Especial o colocas tus monstruos.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <h5><span class="marca-num">2</span> Zonas de Magias y Trampas (3)</h5>
+                        <p>Aquí activas o colocas tus Magias y Trampas.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <h5><span class="marca-num">3</span> Zona de Campo (1)</h5>
+                        <p>Aquí se activan o se colocan las Magias de Campo.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <h5><span class="marca-num">4</span> Extra Deck</h5>
+                        <p>Aquí se coloca tu Extra Deck, boca abajo. Es un mazo aparte de tu Deck.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <h5><span class="marca-num">5</span> Cementerio</h5>
+                        <p>Aquí van, boca arriba, las cartas destruidas o que ya terminaste de usar.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <h5><span class="marca-num">6</span> Deck</h5>
+                        <p>Aquí colocas tu Deck boca abajo. De aquí robas tus cartas.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ============ 5. INVOCACIONES ============ -->
+            <div class="guia-seccion" id="guia-invocar">
+                <h3 class="guia-titulo"><span class="guia-num">5</span> Cómo poner monstruos en el campo</h3>
+
+                <div class="guia-tarjetas">
+                    <div class="guia-tarjeta">
+                        <h5>Invocación Normal</h5>
+                        <p>En tu Main Phase pasas un monstruo de tu mano a una Zona de Monstruo, <strong>boca arriba en Posición de Ataque</strong>. En Rush Duel puedes hacer todas las que quieras en un mismo turno.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <h5>Colocar (Set)</h5>
+                        <p>También puedes colocar el monstruo <strong>boca abajo en Posición de Defensa</strong>. Igual que con la Invocación Normal, no hay límite por turno.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <h5>Invocación por Sacrificio</h5>
+                        <p>Los monstruos de <strong>Nivel 5 o más</strong> necesitan Sacrificios (enviar monstruos de tu campo al Cementerio):</p>
+                        <ul class="guia-lista-simple compacta">
+                            <li>Nivel 5 o 6: Sacrifica <strong>1</strong> monstruo.</li>
+                            <li>Nivel 7 o más: Sacrifica <strong>2</strong> monstruos.</li>
+                        </ul>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <h5>Invocación Especial</h5>
+                        <p>Es poner un monstruo en el campo por el efecto de una carta, sin que sea una Invocación Normal ni colocarlo. Cada carta indica cómo y desde dónde.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ============ 6. POSICIONES Y COMBATE ============ -->
+            <div class="guia-seccion" id="guia-combate">
+                <h3 class="guia-titulo"><span class="guia-num">6</span> Posiciones de batalla y combate</h3>
+
+                <h4 class="guia-subtitulo">Posiciones de batalla</h4>
+
+                <!-- Imagen de las posiciones: la añades tú en img/ayuda/posiciones.png -->
+                <figure class="guia-figura" data-archivo="img/ayuda/posiciones.png">
+                    <img src="img/ayuda/posiciones.png" alt="Posición de Ataque y Posición de Defensa"
+                         onerror="this.parentElement.classList.add('sin-imagen')">
+                    <figcaption>Posición de Ataque (vertical) y Posición de Defensa (horizontal)</figcaption>
+                </figure>
+
+                <div class="guia-tarjetas">
+                    <div class="guia-tarjeta">
+                        <span class="pos-icono ataque"></span>
+                        <h5>Posición de Ataque</h5>
+                        <p>Boca arriba y en vertical. Puede atacar, y si es atacado se usa su <strong>ATK</strong>.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <span class="pos-icono defensa"></span>
+                        <h5>Posición de Defensa</h5>
+                        <p>Boca arriba y en horizontal. No puede atacar, y si es atacado se usa su <strong>DEF</strong>.</p>
+                    </div>
+                    <div class="guia-tarjeta">
+                        <span class="pos-icono abajo"></span>
+                        <h5>Boca abajo</h5>
+                        <p>Los monstruos colocados (Set) están boca abajo en horizontal. Si los atacan, se giran boca arriba antes de comparar su DEF.</p>
+                    </div>
+                </div>
+
+                <div class="guia-nota azul">
+                    Un monstruo que lleva en el campo desde el turno anterior puede <strong>cambiar su posición de batalla una vez por turno</strong>:
+                    de Ataque pasa a Defensa y de Defensa pasa a Ataque.
+                </div>
+
+                <h4 class="guia-subtitulo">Cómo se resuelve un ataque</h4>
+                <p class="guia-texto">
+                    En la Battle Phase eliges un monstruo tuyo para atacar y un monstruo rival como objetivo.
+                    Si tu rival no tiene monstruos, puedes hacer un <strong>ataque directo</strong>.
+                </p>
+
+                <div class="guia-tabla-wrap">
+                    <table class="guia-tabla">
+                        <thead>
+                            <tr><th>Situación</th><th>Resultado</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Ataque directo</strong><br>(el rival no tiene monstruos)</td>
+                                <td>El rival recibe daño igual al ATK de tu monstruo.</td>
+                            </tr>
+                            <tr class="fila-grupo"><td colspan="2">Atacas a un monstruo en Posición de Ataque (se compara ATK contra ATK)</td></tr>
+                            <tr>
+                                <td>Tu ATK es <strong>mayor</strong></td>
+                                <td>Se destruye el monstruo rival y tu rival recibe la diferencia como daño.</td>
+                            </tr>
+                            <tr>
+                                <td>Los ATK son <strong>iguales</strong></td>
+                                <td>Se destruyen los dos monstruos y nadie recibe daño. (Si ambos tienen 0 de ATK, no se destruye ninguno.)</td>
+                            </tr>
+                            <tr>
+                                <td>Tu ATK es <strong>menor</strong></td>
+                                <td>Se destruye tu monstruo y recibes la diferencia como daño.</td>
+                            </tr>
+                            <tr class="fila-grupo"><td colspan="2">Atacas a un monstruo en Posición de Defensa (se compara tu ATK contra su DEF)</td></tr>
+                            <tr>
+                                <td>Tu ATK es <strong>mayor</strong> que su DEF</td>
+                                <td>Se destruye el monstruo rival, pero tu rival no recibe daño.</td>
+                            </tr>
+                            <tr>
+                                <td>ATK y DEF son <strong>iguales</strong></td>
+                                <td>No se destruye ningún monstruo y nadie recibe daño.</td>
+                            </tr>
+                            <tr>
+                                <td>Tu ATK es <strong>menor</strong> que su DEF</td>
+                                <td>No se destruye ningún monstruo, pero recibes la diferencia como daño.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="guia-ejemplo">
+                    <strong>Ejemplo:</strong> tu monstruo de 2500 ATK ataca a otro en Posición de Ataque con 2000 ATK.
+                    El monstruo rival se destruye y tu rival pierde 500 LP.
+                </p>
+            </div>
+
+
+            <!-- ============ 7. CARTAS LEGEND ============ -->
+            <div class="guia-seccion" id="guia-legend">
+                <h3 class="guia-titulo"><span class="guia-num">7</span> Cartas Legend</h3>
+
+                <p class="guia-texto">
+                    Las cartas <strong>LEGEND</strong> son cartas muy poderosas que normalmente pertenecen a la
+                    <strong>época clásica de Yu-Gi-Oh!</strong>. Son los monstruos, magias y trampas más icónicos
+                    de la historia de la serie, y suelen ser de las cartas más fuertes y más buscadas de un Deck.
+                    Por eso su uso está limitado.
+                </p>
+
+                <div class="guia-legend-cartas">
+                    <figure>
+                        <img src="img/cartas/darkmagician.jpg" alt="Dark Magician, monstruo Legend">
+                        <figcaption>Dark Magician<br><span>Monstruo Legend</span></figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/cartas/redeyes.jpg" alt="Red-Eyes Black Dragon, monstruo Legend">
+                        <figcaption>Red-Eyes Black Dragon<br><span>Monstruo Legend</span></figcaption>
+                    </figure>
+                    <figure>
+                        <img src="img/cartas/negarataque.jpg" alt="Negate Attack, trampa Legend">
+                        <figcaption>Negate Attack<br><span>Trampa Legend</span></figcaption>
+                    </figure>
+                </div>
+
+                <div class="guia-nota">
+                    <strong>Límite en tu Deck:</strong> solo puedes llevar como máximo <strong>1 monstruo Legend, 1 magia Legend y 1 trampa Legend</strong>
+                    (una de cada tipo).
+                </div>
+            </div>
+
+
+            <!-- ============ 8. REGLAS EXTRA ============ -->
+            <div class="guia-seccion" id="guia-extra">
+                <h3 class="guia-titulo"><span class="guia-num">8</span> Reglas extras</h3>
+
+                <ul class="guia-lista-simple">
+                    <li><strong>Tu Deck:</strong> un Deck de Rush Duel tiene entre 40 y 60 cartas, con un máximo de 3 copias de la misma carta. En el rol, el límite será de 40 cartas.</li>
+                    <li><strong>Zonas llenas:</strong> si ya tienes 3 monstruos en tus Zonas de Monstruo, no puedes Invocar de Modo Normal ni colocar un monstruo de Nivel 4 o menor desde tu mano.</li>
+                    <li><strong>Magias y Trampas:</strong> si ya tienes 3 cartas en tus Zonas de Magias y Trampas, no puedes activar ni colocar Magias Normales o Trampas desde tu mano.</li>
+                    <li><strong>Efectos de monstruos:</strong> solo se pueden usar una vez por turno mientras el monstruo siga boca arriba en el campo.</li>
+                    <li><strong>Sin límite de mano:</strong> puedes tener todas las cartas que quieras en la mano.</li>
+                    <li><strong>Deck vacío:</strong> si tienes que robar y no hay cartas suficientes en tu Deck, pierdes el duelo.</li>
+                </ul>
+            </div>
+
+
+            <!-- ============ SIGUIENTE PASO ============ -->
+            <div class="guia-cta">
+                <button class="guia-btn" onclick="mostrar('tienda')">Ir a la Tienda</button>
+                <button class="guia-btn secundario" onclick="mostrar('decks')">Armar mi Deck</button>
+            </div>
+
+        </div>
+        <!-- FIN GUÍA -->
+
+    </section>
+    <!-- FIN SECCIÓN COMO JUGAR -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: DECKS                        -->
+    <!-- Lista de decks registrados.           -->
+    <!-- Por completar.                        -->
+    <!-- ===================================== -->
+
+    <section id="decks">
+
+        <!-- Barra de cabecera: botón volver + título, sin banner encima -->
+        <div class="deck-cabecera">
+            <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+            <h2>Constructor de Deck</h2>
+        </div>
+
+        <!-- PESTAÑAS DEL CONSTRUCTOR (solo visibles en móvil)
+             Carta  = ver la carta y añadir/quitar
+             Deck   = solo las cartas de tu deck
+             Buscar = buscador y lista de cartas -->
+        <div class="deck-tabs" id="deckTabs">
+            <button id="tabCarta"  onclick="cambiarPestanaDeck('carta')">Carta</button>
+            <button id="tabDeck"   class="activa" onclick="cambiarPestanaDeck('deck')">Deck <span id="tabDeckCantidad">(0)</span></button>
+            <button id="tabBuscar" onclick="cambiarPestanaDeck('buscar')">Buscar</button>
+        </div>
+
+        <!-- Layout: zona del deck (izq) + cartas disponibles (der) -->
+        <div class="deck-constructor" data-tab="deck">
+
+            <!-- Panel izquierdo: deck en construcción -->
+            <div class="deck-zona">
+                <h3>Mi Deck</h3>
+                <!-- Fila de contadores: cantidad de cartas y costo total -->
+                <div class="deck-contadores">
+                    <div class="deck-contador" id="deckContador">0 / 40 cartas</div>
+                    <div class="deck-costo" id="deckCosto">Costo: 0 DP</div>
+                </div>
+                <!-- Las cartas añadidas aparecen aquí (generado por JS) -->
+                <div class="deck-cartas" id="deckCartas"></div>
+                <!-- Botones: cargar el deck base (3 copias de cada carta gratis) y vaciar -->
+                <div class="deck-botones">
+                    <button class="deck-btn-base" onclick="cargarDeckBase()">Deck base</button>
+                    <button class="deck-btn-vaciar" onclick="vaciarDeck()">Vaciar deck</button>
+                </div>
+            </div>
+
+            <!-- Panel derecho: cartas disponibles para agregar -->
+            <div class="deck-disponibles">
+                <h3>Cartas disponibles</h3>
+
+                <!-- Buscador y filtros del constructor -->
+                <div class="deck-filtros">
+                    <input
+                        type="text"
+                        id="deckBusqueda"
+                        placeholder="Buscar..."
+                        oninput="filtrarListaDecks()">
+                    <div class="deck-filtros-botones">
+                        <button onclick="filtrarDeckCategoria('MONSTER')">Monstruos</button>
+                        <button onclick="filtrarDeckCategoria('SPELL')">Magias</button>
+                        <button onclick="filtrarDeckCategoria('TRAP')">Trampas</button>
+                        <button onclick="filtrarDeckCategoria('')">Todas</button>
+                    </div>
+                </div>
+
+                <!-- Lista generada por JS con todas las cartas -->
+                <div id="deckLista"></div>
+            </div>
+
+            <!-- PANEL CARTA (solo móvil): imagen + descripción + añadir/quitar.
+                 Lo rellena actualizarPanelCartaDeck() en script.js -->
+            <div class="deck-carta-panel" id="deckCartaPanel">
+
+                <!-- Mensaje cuando todavía no hay carta seleccionada -->
+                <div class="deck-carta-vacio" id="deckCartaVacio">
+                    Toca una carta en <b>Buscar</b> o en tu <b>Deck</b>
+                    para verla aquí y añadirla o quitarla.
+                </div>
+
+                <!-- Contenido de la carta seleccionada -->
+                <div id="deckCartaContenido" style="display:none">
+                    <h3 class="dc-nombre" id="dcNombre"></h3>
+                    <img id="dcImagen" src="" alt="">
+
+                    <div class="dc-info">
+                        <div class="dc-meta" id="dcMeta"></div>
+                        <div class="dc-descripcion" id="dcDescripcion"></div>
+                        <div class="dc-stats" id="dcStats"></div>
+                        <div class="dc-extra" id="dcExtra"></div>
+                    </div>
+
+                    <div class="dc-copias" id="dcCopias"></div>
+
+                    <div class="dc-botones">
+                        <button id="dcBtnAgregar" onclick="agregarCartaSeleccionada()">＋ Añadir al deck</button>
+                        <button id="dcBtnQuitar"  onclick="quitarCartaSeleccionada()">－ Quitar del deck</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+    <!-- FIN SECCIÓN DECKS -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: JUGADORES                    -->
+    <!-- Lista de duelistas del rol.           -->
+    <!-- Por completar.                        -->
+    <!-- (Sin tarjeta en el menú por ahora)    -->
+    <!-- ===================================== -->
+
+    <section id="jugadores">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Jugadores</h2>
+
+        <p>
+            Lista de duelistas.
+        </p>
+
+    </section>
+    <!-- FIN SECCIÓN JUGADORES -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: RANKING                      -->
+    <!-- Puntuaciones de los duelistas.        -->
+    <!-- Actualizar manualmente o conectar     -->
+    <!-- a una base de datos más adelante.     -->
+    <!-- ===================================== -->
+
+    <section id="ranking">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Ranking</h2>
+
+        <!-- Lista ordenada por puntos -->
+        <ol>
+            <li>Yuga - 1500 pts</li>
+            <li>Luke - 1200 pts</li>
+            <li>Romin - 1000 pts</li>
+        </ol>
+
+    </section>
+    <!-- FIN SECCIÓN RANKING -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: LUGARES                      -->
+    <!-- Ciudades, tiendas y zonas del rol.    -->
+    <!-- Por completar.                        -->
+    <!-- ===================================== -->
+
+    <section id="lugares">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Lugares</h2>
+
+        <p>
+            Aquí aparecerán las ciudades,
+            tiendas y zonas importantes.
+        </p>
+
+    </section>
+    <!-- FIN SECCIÓN LUGARES -->
+
+
+    <!-- ===================================== -->
+    <!-- SECCIÓN: LORE                         -->
+    <!-- Historia del mundo del rol.           -->
+    <!-- Por completar.                        -->
+    <!-- ===================================== -->
+
+    <section id="lore">
+
+        <button class="btn-volver" onclick="volverMenu()"><span class="flecha">←</span> Volver al menú</button>
+
+        <h2>Lore</h2>
+
+        <p>
+            Historia principal del mundo.
+        </p>
+
+    </section>
+    <!-- FIN SECCIÓN LORE -->
+
+    <!-- ===================================== -->
+    <!-- JAVASCRIPT                            -->
+    <!-- Al final del body para que el HTML    -->
+    <!-- esté cargado antes de que el JS       -->
+    <!-- intente acceder al DOM.               -->
+    <!-- ===================================== -->
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
